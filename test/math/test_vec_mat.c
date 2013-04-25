@@ -5,7 +5,7 @@
 #include "../../src/types.h"
 
 
-START_TEST (test_vec_add)
+START_TEST (test_add_vec4)
 {
   vec4 a = {1.0f,2.0f,3.0f,4.0f};
   vec4 b = {0.1f,0.2f,0.3f,0.4f};
@@ -15,7 +15,106 @@ START_TEST (test_vec_add)
 }
 END_TEST
 
-START_TEST (test_mat_add)
+START_TEST (test_add_vec3)
+{
+  vec4 a = {1.0f,2.0f,3.0f};
+  vec4 b = {0.1f,0.2f,0.3f};
+  vec4 c;
+  add_vec3(a,b,c);
+  ck_assert(c[0]==1.1f && c[1]==2.2f && c[2]==3.3f);
+}
+END_TEST
+
+
+
+START_TEST (test_mag_vec3)
+{
+  vec3 a = {1.0f,2.0f,3.0f};
+  ft mag = 0.0f;
+  mag_vec3(a,mag*);
+
+  vec3 b = {101.0f,202.0f,-303.0f};
+  ft mag2 = 0.0f;
+  mag_vec3(b,mag2*);
+    //range test since floats defy exact comparison
+  ck_assert(mag <3.742f && mag> 3.740f && mag2 < 377.908f && mag2 > 377.906f );
+}
+END_TEST
+
+START_TEST (test_scale_vec3)
+{
+    vec3 a={1.0f,2.0f,3.0f};
+    ft factor = 3.0f;
+    scale_vec3(a, factor);
+    vec3 b = {101.0f,202.0f,303.0f};
+    ft factor2=-0.5f;
+    scale_vec3(b,factor2);
+    ck_assert(a[0]==3.0f && a[1]==6.0f && a[2]==9.0f && b[0]== -50.5f && b[1] == -101.0f && b[2] == -151.5f );
+}
+END_TEST
+
+START_TEST (test_dotprod_vec3)
+{
+    vec3 a={4.0f,8.0f,10.0f};
+    vec3 b={9.0f,2.0f,7.0f};
+    ft result = 0.0f;
+    dotprod_vec3(a,b,result);
+    vec3 c={1.0f,1.0f,0.0f};
+    vec3 d={0.0f,0.0f,1.0f};
+    ft result2 = 1.0f;
+    dotprod_vec3(c,d,result2);
+    vec3 e={4.0f,8.0f,10.0f};
+    vec3 f={-9.0f,2.0f,7.0f};
+    ft result3 = 0.0f;
+    dotprod_vec3(e,f,result3);
+    ck_assert( result==122.0f && result2=0.0f && result3==-122.0f );
+}
+END_TEST
+
+START_TEST (test_crossprod_vec3)
+{
+    vec3 a={3.0f,-3.0f,1.0f};
+    vec3 b={4.0f,9.0f,2.0f};
+    vec3 c={0.0f,0.0f,0.0f};
+    crossprod_vec3(a,b,c);
+    ck_assert( c[0]== -15 && c[1] == -2 && c[2] == 39 );
+}
+END_TEST
+
+START_TEST (test_normalize_vec3)
+{
+    vec3 a={5.0f,0.0f,0.0f};
+    normalize_vec3(a);
+    vec3 b={7.0f,7.0f,0.0f};
+    normalize_vec3(b);
+    vec3 c={3.0f,1.0f,2.0f};
+    normalize_vec3(b);
+    ck_assert( a[0] < 1.0f && a[1] == 0.0f && a[2] == 0.0f &&
+               b[0] < 0.708f && b[0]>0.706f b[1] == 0.0f && b[2] == 0.0f && 
+                c[0] < 0.803f && c[0] > 0.801f && c[1] < 0.268f && c[1] > 0.266f && c[2] < 0.535f && c[3] > 0.533f);
+}
+END_TEST
+
+START_TEST (test_copy_vec3)
+{
+    vec3 a={5.0f,4.0f,3.0f};
+    vec3 b={0.0f,0.0f,0.0f};
+    copy_vec3(a,b);
+    ck_assert( b[0] == 5.0f && b[1] == 4.0f && b[2] == 3.0f  );
+}
+END_TEST
+
+
+START_TEST (test_copy_vec4)
+{
+    vec4 a={5.0f,4.0f,3.0f,2.0f};
+    vec4 b={0.0f,0.0f,0.0f,0.0f};
+    copy_vec4(a,b);
+    ck_assert( b[0] == 5.0f && b[1] == 4.0f && b[2] == 3.0f && b[3] == 2.0f  );
+}
+END_TEST
+
+START_TEST (test_add_mat4)
 {
   mat4 a = {{1.0f,2.0f,3.0f,4.0f},
             {5.0f,6.0f,7.0f,8.0f},
@@ -54,17 +153,49 @@ START_TEST (test_mat_add)
 }
 END_TEST
 
+START_TEST (test_copy_mat4)
+{
+    mat4 a = {{1.0f,2.0f,3.0f,4.0f},
+            {5.0f,6.0f,7.0f,8.0f},
+            {9.0f,10.0f,11.0f,12.0f},
+            {13.0f,14.0f,15.0f,16.0f}};
+   mat4 b = {{0.0f,0.0f,0.0f,0.0f},
+            {0.0f,0.0f,0.0f,0.0f},
+            {0.0f,0.0f,0.0f,0.0f},
+            {0.0f,0.0f,0.0f,0.0f}};
+    copy_mat4(a,b);
+    ck_assert( b[0][0] == 1.0f && b[0][1] == 2.0f && b[0][2] == 3.0f && b[0][3] == 4.0f &&
+               b[1][0] == 5.0f && b[1][1] == 6.0f && b[1][2] == 7.0f && b[1][3] == 8.0f &&
+                b[2][0] == 9.0f && b[2][1] == 10.0f && b[2][2] == 11.0f && b[2][3] == 12.0f &&
+                b[3][0] == 13.0f && b[3][1] == 14.0f && b[3][2] == 15.0f && b[3][3] == 16.0f  );
+}
+END_TEST
+
+
+void mult_mat4(mat4 a, mat4 b, mat4 c);
+
+void mult_vec4mat4(vec4 a, mat4 b, vec4 c);
+
+
 Suite * vec_mat_suite (void)
 {
   Suite *s = suite_create ("Vec_Mat");
 
   /* Core test case */
-  TCase *tc_vec_mat = tcase_create ("vec_mat");
-  tcase_add_test (tc_vec_mat, test_vec_add);
-  tcase_add_test (tc_vec_mat, test_mat_add);
-  suite_add_tcase(s, tc_vec_mat);
+    TCase *tc_vec_mat = tcase_create ("vec_mat");
+    tcase_add_test (tc_vec_mat, test_add_vec4);
+    tcase_add_test (tc_vec_mat, test_add_vec3);
+    tcase_add_test (tc_vec_mat, test_mag_vec3);
+    tcase_add_test (tc_vec_mat, test_scale_vec3);
+    tcase_add_test (tc_vec_mat, test_dotprod_vec3);
+    tcase_add_test (tc_vec_mat, test_crossprod_vec3);
+    tcase_add_test (tc_vec_mat, test_normalize_vec3);
+    tcase_add_test (tc_vec_mat, test_copy_vec3);
+    tcase_add_test (tc_vec_mat, test_copy_vec4);
 
-  return s;
+    tcase_add_test (tc_vec_mat, test_mat_add);
+    suite_add_tcase(s, tc_vec_mat);
+    return s;
 }
 
 int
