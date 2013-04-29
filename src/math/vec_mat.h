@@ -1,3 +1,18 @@
+/*
+ * vec_mat.h
+ * Header file for library of vector and matrix maths functions
+ *
+ * This file is part of esgmkt (OpenGL ES 2.0 Game Kit), 
+ * Copyright Matthew Livesey 2013 (matt.computes@gmail.com)
+ * 
+ * This work is distributed under the BSD licence, a copy of which is
+ * distributed with this work.
+ * 
+ * esgmkt is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ */
+
 #ifndef VEC_MAT
 #define VEC_MAT
 
@@ -26,6 +41,6 @@ void copy_mat4(mat4 a, mat4 b);
 
 void mult_mat4(mat4 a, mat4 b, mat4 c);
 
-void mult_vec4mat4(vec4 a, mat4 b, vec4 c);
+void mult_mat4vec4(mat4 a, vec4 b, vec4 c);
 
 #endif

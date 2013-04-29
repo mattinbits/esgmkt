@@ -19,6 +19,6 @@ bin/test_vec_mat.o: test/math/test_vec_mat.c
 	$(CC) $(CFLAGS) -c test/math/test_vec_mat.c -o bin/test_vec_mat.o 
 
 test: bin/test_vec_mat.o bin/vec_mat.o
-	$(CC)  bin/test_vec_mat.o bin/vec_mat.o -o test_pack -lcheck
+	$(CC)  bin/test_vec_mat.o bin/vec_mat.o -o test_pack -lm -lcheck
 
 
