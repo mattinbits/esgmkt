@@ -158,12 +158,31 @@ inline void copy_vec(ft a [], ft b[], int size)
 */
 
 
+
+
     /* Function prototypes for functions not declared in header */
 void mult_mat(ft *a, ft *b, ft *c, int size);
 void mult_matvec(ft *a, ft b[], ft c[], int size);
 void copy_mat(ft* a, ft* b, int size);
 
     /*Function implementations*/
+    
+void getidentity_mat4(/*return*/mat4 a)
+{
+     mat4 b = {{1.0f,0.0f,0.0f,0.0f},
+            {0.0f,1.0f,0.0f,0.0f},
+            {0.0f,0.0f,1.0f,0.0f},
+            {0.0f,0.0f,0.0f,1.0f}};
+     memcpy(b,a,16*sizeof(ft));       
+}
+    
+void create_mat4(mat4 a,vec4 col0, vec4 col1, vec4 col2, vec4 col3)
+{
+    memcpy(a[0],col0,4*sizeof(ft));
+    memcpy(a[1],col1,4*sizeof(ft));
+    memcpy(a[2],col2,4*sizeof(ft));
+    memcpy(a[3],col3,4*sizeof(ft));
+}
 
 void add_mat4(mat4 a, mat4 b, mat4 c)
 {
@@ -183,19 +202,27 @@ void mult_mat4(mat4 a, mat4 b, mat4 c)
     mult_mat(a,b,c,4);
 }
 
+
 inline void mult_mat(ft *a, ft *b, ft *c, int size)
 {
     int i=0;
     int j=0;
     int k=0;
+    /*i is row index*/
     for(i=0;i<size;i++)
     {
+        /*j is column index*/
         for(j=0;j<size;j++)
         {
-            *(c+i*size+j)=0.0f;
+  
+            *(c+i+size*j)=0.0f;
             for(k=0;k<size;k++)
             {
-                *(c+i*size+j)+=(*(a+i*size+k)) * (*(b+k*size+j));
+                /*Remember, it's column major!
+                    So in 'a' we work along the row
+                    and in 'b' we work along the column
+                 */
+                *(c+i+size*j)+=*(a+k+j*size) * *(b+k*size+i);
             }
         }    
     }
@@ -216,7 +243,7 @@ void mult_matvec(ft *a, ft b[], ft c[], int size)
         c[i]=0.0f;       
         for(j=0;j<size;j++)
         {
-            c[i]+=*(a+j*size+i) * b[j];
+            c[i]  +=  *(a+i*size+j) * b[j];
         }    
     }
 }
