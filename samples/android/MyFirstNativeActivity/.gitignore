@@ -9,3 +9,5 @@ obj/*
 .cproject
 .project
 .classpath
+bin
+bin/*
