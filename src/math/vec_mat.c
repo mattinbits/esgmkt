@@ -31,11 +31,28 @@ void crossprod_vec3(vec3 a, vec3 b, vec3 c);
 void copy_vec(ft a [], ft b[], int size);
 
     /*Function implementations*/
+    
+void create_vec3(vec3 a, ft a1, ft a2, ft a3)
+{
+    a[0]=a1;
+    a[1]=a2;
+    a[2]=a3;
+}
+
+void create_vec4(vec4 a, ft a1, ft a2, ft a3, ft a4)
+{
+    a[0]=a1;
+    a[1]=a2;
+    a[2]=a3;
+    a[3]=a4;
+}
 
 void add_vec4(vec4 a, vec4 b, vec4 c)
 {
     add_vec(a,b,c,4);
 }
+
+
 
 void add_vec3(vec3 a, vec3 b, vec3 c)
 {
@@ -102,7 +119,7 @@ void dotprod_vec3(vec3 a, vec4 b, ft* result)
    dotprod_vec(a,b,result,3);
 }
 
-inline void dotprod_vec(ft a [], vec4 b, ft* result, int size)
+inline void dotprod_vec(ft a [], ft b [], ft* result, int size)
 {
    (*result)=0;
     int i = 0;
@@ -173,7 +190,7 @@ void getidentity_mat4(/*return*/mat4 a)
             {0.0f,1.0f,0.0f,0.0f},
             {0.0f,0.0f,1.0f,0.0f},
             {0.0f,0.0f,0.0f,1.0f}};
-     memcpy(b,a,16*sizeof(ft));       
+     memcpy(a,b,16*sizeof(ft));       
 }
     
 void create_mat4(mat4 a,vec4 col0, vec4 col1, vec4 col2, vec4 col3)
@@ -208,21 +225,21 @@ inline void mult_mat(ft *a, ft *b, ft *c, int size)
     int i=0;
     int j=0;
     int k=0;
-    /*i is row index*/
+    /*i is ("where in the row") index*/
     for(i=0;i<size;i++)
     {
-        /*j is column index*/
+        /*j is ("where in the column") index*/
         for(j=0;j<size;j++)
         {
   
-            *(c+i+size*j)=0.0f;
+            *(c+i*size+j)=0.0f;
             for(k=0;k<size;k++)
             {
                 /*Remember, it's column major!
                     So in 'a' we work along the row
                     and in 'b' we work along the column
                  */
-                *(c+i+size*j)+=*(a+k+j*size) * *(b+k*size+i);
+                *(c+i*size+j)+=*(a+k*size+j) * *(b+k+i*size);
             }
         }    
     }
@@ -243,7 +260,7 @@ void mult_matvec(ft *a, ft b[], ft c[], int size)
         c[i]=0.0f;       
         for(j=0;j<size;j++)
         {
-            c[i]  +=  *(a+i*size+j) * b[j];
+            c[i]  +=  *(a+i+j*size) * b[j];
         }    
     }
 }
@@ -256,15 +273,7 @@ void copy_mat4(mat4 a, mat4 b)
 
 inline void copy_mat(ft *a, ft *b, int size)
 {
-    int i=0;
-    int j=0;
-    for(i=0;i<size;i++)
-    {
-        for(j=0;j<size;j++)
-        {
-            *(b+i*size+j)=*(a+i*size+j);
-        }
-    }
+    memcpy(b,a,size*size*sizeof(ft)); 
 }
 
 

@@ -18,12 +18,28 @@
 #include <math.h>
 #include "../../src/math/vec_mat.h"
 #include "../../src/types.h"
-#define EPSILON (0.000001f)
+#define EPSILON (0.001f)
 
 static boolean eq(ft a, ft b)
 {
     return fabs(a - b) < EPSILON;
 }
+
+START_TEST (test_create_vec4)
+{
+  vec4 a;
+  create_vec4(a,2.0f,3.3f,4.4f,100.0f);
+  ck_assert(eq(a[0],2.0f) && eq(a[1],3.3f) && eq(a[2],4.4f) && eq(a[3],100.0f));
+}
+END_TEST
+
+START_TEST (test_create_vec3)
+{
+  vec4 a;
+  create_vec3(a,6.3f,12.4f,54.76f);
+  ck_assert(eq(a[0],6.3f) && eq(a[1],12.4f) && eq(a[2],54.76f));
+}
+END_TEST
 
 START_TEST (test_add_vec4)
 {
@@ -87,7 +103,10 @@ START_TEST (test_dotprod_vec3)
     vec3 f={-9.0f,2.0f,7.0f};
     ft result3 = 0.0f;
     dotprod_vec3(e,f,&result3);
-    ck_assert( eq(result,122.0f) && eq(result2,0.0f) && eq(result3,-122.0f) );
+    //printf("result: %f \n",result);
+    //printf("result2: %f \n",result2);
+    //printf("result3: %f \n",result3);
+    ck_assert( eq(result,122.0f) && eq(result2,0.0f) && eq(result3,50.0f) );
 }
 END_TEST
 
@@ -146,7 +165,7 @@ START_TEST (test_getidentity_mat4)
      ck_assert( b[0][0] == 1.0f && b[0][1] == 0.0f && b[0][2] == 0.0f && b[0][3] == 0.0f &&
                b[1][0] == 0.0f && b[1][1] == 1.0f && b[1][2] == 0.0f && b[1][3] == 0.0f &&
                 b[2][0] == 0.0f && b[2][1] == 0.0f && b[2][2] == 1.0f && b[2][3] == 0.0f &&
-                b[3][0] == 0.0f && b[3][1] == 0.0f && b[3][2] == 0.0f && b[3][3] == 0.0f  );
+                b[3][0] == 0.0f && b[3][1] == 0.0f && b[3][2] == 0.0f && b[3][3] == 1.0f  );
 }END_TEST
 
 
@@ -185,21 +204,25 @@ START_TEST (test_add_mat4)
   add_mat4(a,b,c);
   int i=0;
   int j=0;
-  for(i=0;i<4;i++)
+  /*for(i=0;i<4;i++)
   {
     for(j=0;j<4;j++)
     {
         printf("%f \n",c[i][j]);
     }
-  }
-  boolean valid_mat_add= TRUE;
+  }*/
+  boolean valid_mat_add = TRUE;
   for(i=0;i<4;i++)
   {
     for(j=0;j<4;j++)
     {
         
-        valid_mat_add = answer[i][j]==c[i][j];
+        valid_mat_add = (answer[i][j]==c[i][j]);
+        if(!valid_mat_add)
+            break;
     }
+    if(!valid_mat_add)
+            break;
   }
   ck_assert(valid_mat_add);
   
@@ -276,9 +299,36 @@ r3	64.0000000	96.0000000	62.6000000	98.9600000
     create_mat4(b,bc1,bc2,bc3,bc4);
     mat4 c;
     mult_mat4(a,b,c);
+    int i,j;
+    /*for(i=0;i<4;i++)
+    {
+        for(j=0;j<4;j++)
+        {
+            printf("%f \t",a[j][i]);
+        }
+        printf("\n");
+    }
+     printf("\n");
+    for(i=0;i<4;i++)
+    {
+        for(j=0;j<4;j++)
+        {
+            printf("%f \t",b[j][i]);
+        }
+        printf("\n");
+    }
+     printf("\n");
+    for(i=0;i<4;i++)
+    {
+        for(j=0;j<4;j++)
+        {
+            printf("%f \t",c[j][i]);
+        }
+        printf("\n");
+    }*/
     ck_assert( 
                 eq(c[0][0],59.5f) && eq(c[1][0],75.0f) && eq(c[2][0],63.8f) && eq(c[3][0], 81.8f) &&
-               eq(c[0][1], 105.66f) && eq(c[1][1] ,-14.44f) && eq(c[2][1],118.0f) && eq(c[3][1], 8.2512f) &&
+               eq(c[0][1], 105.66f) && eq(c[1][1] ,-14.44f) && eq(c[2][1],118.0f) && eq(c[3][1], -8.2512f)&&
                 eq(c[0][2], 1436.23f) && eq(c[1][2], 2867.46f) && eq(c[2][2], 1060.79f) && eq(c[3][2], 2660.72f) &&
                 eq(c[0][3], 64.0f) && eq(c[1][3], 96.0f) && eq(c[2][3] , 62.6f) && eq(c[3][3], 98.96f)
             );
@@ -324,6 +374,15 @@ r3	2.0000000	3.0000000	4.0000000	5.0000000
             {0.0f,0.0f,0.0f,0.0f},
             {0.0f,0.0f,0.0f,0.0f}};
    create_mat4(a,ac1,ac2,ac3,ac4);
+   int i,j;
+   for(i=0;i<4;i++)
+    {
+        for(j=0;j<4;j++)
+        {
+            printf("%f \t",a[j][i]);
+        }
+        printf("\n");
+    }
     vec4 b = {1.0f,2.0f,3.0f,4.0f};
     vec4 c = {0.0f,0.0f,0.0f,0.0f};    
     mult_mat4vec4(a,b,c);
@@ -339,6 +398,8 @@ Suite * vec_mat_suite (void)
 
   /* Core test case */
     TCase *tc_vec_mat = tcase_create ("vec_mat");
+    tcase_add_test (tc_vec_mat, test_create_vec3);
+    tcase_add_test (tc_vec_mat, test_create_vec4);
     tcase_add_test (tc_vec_mat, test_add_vec4);
     tcase_add_test (tc_vec_mat, test_add_vec3);
     tcase_add_test (tc_vec_mat, test_mag_vec3);
