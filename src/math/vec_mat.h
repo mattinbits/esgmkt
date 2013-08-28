@@ -32,7 +32,6 @@ void create_vec4(vec4 a, ft a1, ft a2, ft a3, ft a4);
 void add_vec3(vec3 a, vec3 b, /*return*/vec3 c);
 void add_vec4(vec4 a, vec4 b, /*return*/vec4 c);
 
-
 void mag_vec3(vec3 a, float* mag);
 void scale_vec3(vec3 a, float factor);
 void dotprod_vec3(vec3 a, vec3 b, ft* result);
