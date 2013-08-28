@@ -1,0 +1,13 @@
+.settings
+.settings/*
+gen
+gen/*
+libs
+libs/*
+obj
+obj/*
+.cproject
+.project
+.classpath
+bin
+bin/*
